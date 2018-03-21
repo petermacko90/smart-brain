@@ -12,7 +12,7 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
 					<input onChange={onInputChange}
 						className='f4 pa2 w-60 center'
 						type='text'
-						placeholder='copy url of image here'
+						placeholder='URL of an image'
 					/>
 					<button onClick={onButtonSubmit} className='w-40 grow f4 link ph3 pv2 dib white bg-dark-blue'>Detect</button>
 				</div>

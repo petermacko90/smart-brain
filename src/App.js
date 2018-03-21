@@ -7,7 +7,7 @@ import FaceRecognition from './components/FaceRecognition/FaceRecognition';
 /*import Logo from './components/Logo/Logo';*/
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
-/*import Notification from './components/Notification/Notification';*/
+import Notification from './components/Notification/Notification';
 import './App.css';
 
 const particlesOptions = {
@@ -34,6 +34,10 @@ const initialState = {
     email: '',
     entries: 0,
     joined: ''
+  },
+  notification: {
+    show: false,
+    text: ''
   }
 }
 
@@ -50,7 +54,7 @@ class App extends Component {
       email: data.email,
       entries: data.entries,
       joined: data.joined
-    }})
+    }});
   }
 
   calculateFaceLocation = (data) => {
@@ -76,8 +80,16 @@ class App extends Component {
 
   onButtonSubmit = () => {
     if (!this.state.input) {
+      this.setState({notification: {
+        show: true,
+        text: 'Empty input!'
+      }});
       return;
     }
+    this.setState({notification: {
+      show: false,
+      text: ''
+    }});
     this.setState({imageUrl: this.state.input});
     fetch('https://murmuring-badlands-89925.herokuapp.com/imageurl', {
       method: 'post',
@@ -104,7 +116,12 @@ class App extends Component {
         }
         this.displayFaceBox(this.calculateFaceLocation(response))
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        this.setState({notification: {
+          show: true,
+          text: 'Incorrect image URL!'
+        }});
+      });
   }
 
   onRouteChange = (route) => {
@@ -116,11 +133,24 @@ class App extends Component {
     this.setState({route: route});
   }
 
+  onNotificationClick = () => {
+    this.setState({notification: {
+      show: false,
+      text: ''
+    }});
+  }
+
   render() {
   	const { isSignedIn, imageUrl, route, box } = this.state;
     return (
       <div className="App">
-        {/* <Notification text='Notification test' /> */}
+        {this.state.notification.show ? 
+          <Notification
+            text={this.state.notification.text}
+            onClick={this.onNotificationClick}
+          />
+          : null
+        }
         <Particles className='particles' params={particlesOptions} />
         <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
         {route === 'home' ?

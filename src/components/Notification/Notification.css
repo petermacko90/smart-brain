@@ -2,11 +2,8 @@
 	position: fixed;
 	top: 15%;
 	right: 10%;
-	background-color: rgba(0,0,0,0.25);
+	background-color: rgba(255,0,0,0.5);
 	padding: 20px;
-}
-
-.closeIcon {
-	margin-left: 10px;
 	cursor: pointer;
+	width: 200px;
 }
