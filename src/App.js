@@ -79,6 +79,7 @@ class App extends Component {
   }
 
   onButtonSubmit = () => {
+    // show notification on empty input and return
     if (!this.state.input) {
       this.setState({notification: {
         show: true,
@@ -86,6 +87,7 @@ class App extends Component {
       }});
       return;
     }
+    // hide notification
     this.setState({notification: {
       show: false,
       text: ''
@@ -100,7 +102,8 @@ class App extends Component {
     })
       .then(response => response.json())
       .then(response => {
-        if (response) {
+        // only increase entry count in case of correct image url
+        if (response !== 'unable to work with api') {
           fetch('https://murmuring-badlands-89925.herokuapp.com/image', {
             method: 'put',
             headers: {'Content-Type': 'application/json'},
@@ -114,9 +117,10 @@ class App extends Component {
             })
             .catch(console.log)
         }
-        this.displayFaceBox(this.calculateFaceLocation(response))
+        this.displayFaceBox(this.calculateFaceLocation(response));
       })
       .catch(err => {
+        // show notification on incorrect input
         this.setState({notification: {
           show: true,
           text: 'Incorrect image URL!'
@@ -134,6 +138,7 @@ class App extends Component {
   }
 
   onNotificationClick = () => {
+    // hide notification on click
     this.setState({notification: {
       show: false,
       text: ''
