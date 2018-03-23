@@ -25,7 +25,7 @@ const particlesOptions = {
 const initialState = {
   input: '',
   imageUrl: '',
-  box: {},
+  faces: [],
   route: 'signin',
   isSignedIn: false,
   user: {
@@ -58,20 +58,26 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFace = data.outputs[0].data.regions[0].region_info.bounding_box;
     const image = document.getElementById('inputimage');
     const width = Number(image.width);
     const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height)
+    const faces = data.outputs[0].data.regions;
+    let faceBoxes = [];
+
+    for (let i = 0, l = faces.length; i < l; i++) {
+      let face = faces[i].region_info.bounding_box;
+      faceBoxes[i] = {
+        leftCol: face.left_col * width,
+        topRow: face.top_row * height,
+        rightCol: width - (face.right_col * width),
+        bottomRow: height - (face.bottom_row * height)
+      }
     }
+    return faceBoxes;
   }
 
-  displayFaceBox = (box) => {
-    this.setState({box: box});
+  displayFaceBox = (faces) => {
+    this.setState({faces: faces});
   }
 
   onInputChange = (event) => {
@@ -87,11 +93,13 @@ class App extends Component {
       }});
       return;
     }
+
     // hide notification
     this.setState({notification: {
       show: false,
       text: ''
     }});
+
     this.setState({imageUrl: this.state.input});
     fetch('https://murmuring-badlands-89925.herokuapp.com/imageurl', {
       method: 'post',
@@ -117,6 +125,7 @@ class App extends Component {
             })
             .catch(console.log)
         }
+
         this.displayFaceBox(this.calculateFaceLocation(response));
       })
       .catch(err => {
@@ -125,6 +134,7 @@ class App extends Component {
           show: true,
           text: 'Incorrect image URL!'
         }});
+
       });
   }
 
@@ -137,8 +147,8 @@ class App extends Component {
     this.setState({route: route});
   }
 
+  // hide notification on click
   onNotificationClick = () => {
-    // hide notification on click
     this.setState({notification: {
       show: false,
       text: ''
@@ -146,7 +156,7 @@ class App extends Component {
   }
 
   render() {
-  	const { isSignedIn, imageUrl, route, box } = this.state;
+  	const { isSignedIn, imageUrl, route, faces } = this.state;
     return (
       <div className="App">
         {this.state.notification.show ? 
@@ -169,7 +179,7 @@ class App extends Component {
               onInputChange={this.onInputChange}
               onButtonSubmit={this.onButtonSubmit}
             />
-            <FaceRecognition box={box} imageUrl={imageUrl} />
+            <FaceRecognition faces={faces} imageUrl={imageUrl} />
           </div>
         :
           (route === 'signin' || route === 'signout' ?
