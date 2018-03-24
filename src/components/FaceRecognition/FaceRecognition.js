@@ -13,14 +13,19 @@ const FaceRecognition = ({ imageUrl, faces }) => {
 					right: faces[i].rightCol,
 					bottom: faces[i].bottomRow,
 					left: faces[i].leftCol
-				}}
-			>
+				}}>
 			</div>;
 	}
 	return (
 		<div className='center ma'>
 			<div className='absolute mt2'>
-				<img id='inputimage' alt='' src={imageUrl} width='500px' height='auto' />
+				<img
+					id='inputimage'
+					alt=''
+					src={imageUrl}
+					width='500px'
+					height='auto'
+				/>
 				{boxes}
 			</div>
 		</div>

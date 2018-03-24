@@ -22,6 +22,13 @@ class Register extends React.Component {
     this.setState({password: event.target.value})
   }
 
+  // submit also on pressing enter from name, email or password
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.onSubmitSignIn();
+    }
+  }
+
   onSubmitSignIn = () => {
     fetch('https://murmuring-badlands-89925.herokuapp.com/register', {
       method: 'post',
@@ -56,26 +63,38 @@ class Register extends React.Component {
                   name="name"
                   id="name"
                   onChange={this.onNameChange}
+                  onKeyPress={this.handleKeyPress}
+                  autoFocus="autofocus"
                 />
       				</div>
       				<div className="mt3">
-        				<label className="db fw6 lh-copy f6" htmlFor="email-address">Email</label>
+        				<label
+                  className="db fw6 lh-copy f6"
+                  htmlFor="email-address">
+                  E-mail
+                </label>
         				<input
                   className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="email"
                   name="email-address"
                   id="email-address"
                   onChange={this.onEmailChange}
+                  onKeyPress={this.handleKeyPress}
                 />
       				</div>
       				<div className="mv3">
-        				<label className="db fw6 lh-copy f6" htmlFor="password">Password</label>
+        				<label
+                  className="db fw6 lh-copy f6"
+                  htmlFor="password">
+                  Password
+                </label>
         				<input
                   className="b pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100"
                   type="password"
                   name="password"
                   id="password"
                   onChange={this.onPasswordChange}
+                  onKeyPress={this.handleKeyPress}
                 />
       				</div>
       			</fieldset>

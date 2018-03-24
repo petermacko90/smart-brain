@@ -121,8 +121,9 @@ class App extends Component {
           })
             .then(response => response.json())
             .then(count => {
-              this.setState(Object.assign(this.state.user, {entries: count}))
-            })
+              this.setState(Object.assign(this.state.user, {
+                entries: count}));
+              })
             .catch(console.log)
         }
 
@@ -167,7 +168,10 @@ class App extends Component {
           : null
         }
         <Particles className='particles' params={particlesOptions} />
-        <Navigation isSignedIn={isSignedIn} onRouteChange={this.onRouteChange} />
+        <Navigation
+          isSignedIn={isSignedIn}
+          onRouteChange={this.onRouteChange}
+        />
         {route === 'home' ?
           <div>
             {/*<Logo />*/}
@@ -183,9 +187,15 @@ class App extends Component {
           </div>
         :
           (route === 'signin' || route === 'signout' ?
-          	<Signin loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+          	<Signin
+              loadUser={this.loadUser}
+              onRouteChange={this.onRouteChange}
+            />
           :
-          	<Register loadUser={this.loadUser} onRouteChange={this.onRouteChange} />
+          	<Register
+              loadUser={this.loadUser}
+              onRouteChange={this.onRouteChange}
+            />
           )
         }
       </div>
