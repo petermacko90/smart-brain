@@ -32,7 +32,7 @@ class Signin extends React.Component {
   onSubmitSignIn = () => {
     const { signInEmail, signInPassword } = this.state;
 
-    // show notification on empty input and return
+    // show notification on empty e-mail or password and return
     if (!signInEmail || !signInPassword) {
       this.setState({notification: {
         show: true,
