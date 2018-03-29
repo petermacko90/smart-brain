@@ -95,10 +95,7 @@ class App extends Component {
     }
 
     // hide notification
-    this.setState({notification: {
-      show: false,
-      text: ''
-    }});
+    this.onNotificationClick();
 
     this.setState({imageUrl: this.state.input});
     fetch('https://murmuring-badlands-89925.herokuapp.com/imageurl', {
