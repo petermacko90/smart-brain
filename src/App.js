@@ -105,35 +105,42 @@ class App extends Component {
         input: this.state.input
       })
     })
-      .then(response => response.json())
-      .then(response => {
-        // only increase entry count in case of correct image url
-        if (response !== 'unable to work with api') {
-          fetch('https://murmuring-badlands-89925.herokuapp.com/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              id: this.state.user.id
-            })
+    .then(response => response.json())
+    .then(response => {
+      // only increase entry count in case of correct image url
+      if (response !== 'unable to work with api') {
+        fetch('https://murmuring-badlands-89925.herokuapp.com/image', {
+          method: 'put',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            id: this.state.user.id
           })
-            .then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, {
-                entries: count}));
-              })
-            .catch(console.log)
-        }
+        })
+        .then(response => response.json())
+        .then(count => {
+          this.setState(Object.assign(this.state.user, {entries: count}));
+        })
+      }
 
-        this.displayFaceBox(this.calculateFaceLocation(response));
-      })
-      .catch(err => {
+      this.displayFaceBox(this.calculateFaceLocation(response));
+    })
+    .catch(err => {
+      if (err.name === "TypeError") {
+        // show notification on network error
+        this.setState({notification: {
+          show: true,
+          text: 'Network error occured. Try again later.'
+        }});
+
+      } else {
         // show notification on incorrect input
         this.setState({notification: {
           show: true,
           text: 'Incorrect image URL!'
         }});
 
-      });
+      }
+    });
   }
 
   onRouteChange = (route) => {

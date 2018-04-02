@@ -58,20 +58,30 @@ class Register extends React.Component {
         name: name
       })
     })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
-        } else {
-          // show notification
-          this.setState({notification: {
-            show: true,
-            text: 'E-mail already exists!'
-          }});
+    .then(response => response.json())
+    .then(user => {
+      if (user.id) {
+        this.props.loadUser(user);
+        this.props.onRouteChange('home');
+      } else {
+        // show notification unable to register
+        this.setState({notification: {
+          show: true,
+          text: 'Unable to register!'
+        }});
 
-        }
-      });
+      }
+    })
+    .catch(err => {
+      // show notification on network error
+      if (err.name === "TypeError") {
+        this.setState({notification: {
+          show: true,
+          text: 'Network error occured. Try again later.'
+        }});
+      }
+
+    });
   }
 
   // hide notification on click
@@ -106,6 +116,7 @@ class Register extends React.Component {
                     onChange={this.onNameChange}
                     onKeyPress={this.handleKeyPress}
                     autoFocus="autofocus"
+                    maxLength="100"
                   />
         				</div>
         				<div className="mt3">

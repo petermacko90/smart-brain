@@ -52,20 +52,30 @@ class Signin extends React.Component {
         password: signInPassword
       })
     })
-      .then(response => response.json())
-      .then(user => {
-        if (user.id) {
-          this.props.loadUser(user);
-          this.props.onRouteChange('home');
-        } else {
-          // show notification on e-mail or password
-          this.setState({notification: {
-            show: true,
-            text: 'Incorrect e-mail or password!'
-          }});
+    .then(response => response.json())
+    .then(user => {
+      if (user.id) {
+        this.props.loadUser(user);
+        this.props.onRouteChange('home');
+      } else {
+        // show notification on e-mail or password
+        this.setState({notification: {
+          show: true,
+          text: 'Incorrect e-mail or password!'
+        }});
 
-        }
-      })
+      }
+    })
+    .catch(err => {
+      if (err.name === "TypeError") {
+        // show notification on network error
+        this.setState({notification: {
+          show: true,
+          text: 'Network error occured. Try again later.'
+        }});
+
+      }
+    });
   }
 
   // hide notification on click
