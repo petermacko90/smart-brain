@@ -4,6 +4,8 @@ Given a URL of image, it shows faces on the image. This is done by a call to [Cl
 
 This repository contains front-end, back-end is located at [smart-brain-api](https://github.com/petermacko90/smart-brain-api).
 
+App is also available [online](https://smart-brain-fe.herokuapp.com/).
+
 The changes/additions I've made:
 - app shows all the faces on a picture instead of just the first one
 - after signing out, the Sign in form is shown instead of Register
