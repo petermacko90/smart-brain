@@ -122,24 +122,24 @@ class App extends Component {
         })
       }
 
-      this.displayFaceBox(this.calculateFaceLocation(response));
-    })
-    .catch(err => {
-      if (err.name === "TypeError") {
-        // show notification on network error
+      if (Object.keys(response.outputs[0].data).length === 0) {
+        // show notification no faces found
         this.setState({notification: {
           show: true,
-          text: 'Network error occured. Try again later.'
+          text: 'No faces found!'
         }});
 
       } else {
-        // show notification on incorrect input
-        this.setState({notification: {
-          show: true,
-          text: 'Incorrect image URL!'
-        }});
-
+        this.displayFaceBox(this.calculateFaceLocation(response));
       }
+    })
+    .catch(err => {
+      // show notification on incorrect input
+      this.setState({notification: {
+        show: true,
+        text: 'Incorrect image URL!'
+      }});
+
     });
   }
 
